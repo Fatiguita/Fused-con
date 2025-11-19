@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twitch DVR</title>
+    <style>
+        :root { --bg:#121212; --card:#1e1e1e; --text:#eee; --accent:#9146FF; --border:#333; --font:sans-serif; }
+        /* Themes */
+        body.theme-naruto { --bg:#101010; --card:#1f1f1f; --text:#f0f0f0; --accent:#ff8800; --border:#ff8800; --font:"Trebuchet MS"; }
+        body.theme-naruto .card { border-left:5px solid #ff8800!important; }
+        body.theme-cyber { --bg:#050510; --card:#0a0a20; --text:#0ff; --accent:#fcee0a; --border:#f0f; --font:monospace; }
+        body.theme-terminal { --bg:#000; --card:#000; --text:#0f0; --accent:#0f0; --border:#0f0; --font:monospace; }
+        body.theme-midnight { --bg:#0f172a; --card:#1e293b; --text:#e2e8f0; --accent:#38bdf8; --border:#334155; }
+        body.theme-dracula { --bg:#282a36; --card:#44475a; --text:#f8f8f2; --accent:#ff79c6; --border:#6272a4; }
+        body.theme-retro { --bg:#2b003b; --card:#470063; --text:#ffe6fa; --accent:#00d9ff; --border:#ff00a6; }
+        body.theme-paper { --bg:#f5f5f5; --card:#fff; --text:#111; --accent:#000; --border:#000; --font:"Georgia"; }
+        body.theme-forest { --bg:#1a2f1a; --card:#263c26; --text:#dbe7db; --accent:#76c476; --border:#4a6b4a; }
+        body.theme-90s { --bg:#008080; --card:#c0c0c0; --text:#000; --accent:#000080; --border:#fff; }
+        body.theme-2000s { --bg:#000; --card:#050505; --text:#0f0; --accent:#0f0; --border:#003300; }
+        body.theme-otaku { --bg:#fff0f5; --card:#fff; --text:#555; --accent:#ff69b4; --border:#ffb6c1; font-family:cursive; }
+        body.theme-office { --bg:#f0f2f5; --card:#fff; --text:#333; --accent:#1877f2; --border:#ccc; }
+
+        body { background:var(--bg); color:var(--text); font-family:var(--font); padding:15px; margin:0; }
+        .nav { display:flex; gap:10px; overflow-x:auto; margin-bottom:20px; padding-bottom:5px; }
+        .nav a { padding:10px 15px; background:var(--card); border:1px solid var(--border); color:var(--text); text-decoration:none; white-space:nowrap; border-radius:4px; }
+        .nav a.active { border-color:var(--accent); color:var(--accent); font-weight:bold; }
+        .container { max-width:800px; margin:0 auto; }
+        .card { background:var(--card); padding:15px; margin-bottom:10px; border:1px solid var(--border); border-radius:8px; }
+        input, select { background:var(--bg); color:var(--text); border:1px solid var(--border); padding:10px; width:100%; box-sizing:border-box; margin-bottom:10px; }
+        button { background:var(--accent); color:#fff; border:none; padding:12px; width:100%; cursor:pointer; font-weight:bold; border-radius:4px; }
+        .tag { font-size:0.7em; background:var(--bg); padding:2px 6px; border:1px solid var(--border); margin-left:5px; border-radius:4px; }
+    </style>
+</head>
+<body class="{{ theme }}">
+    <div class="container">
+        <nav class="nav">
+            <a href="/" class="{{ 'active' if request.path == '/' }}">Dashboard</a>
+            <a href="/gallery" class="{{ 'active' if request.path == '/gallery' }}">Library</a>
+            <a href="/settings" class="{{ 'active' if request.path == '/settings' }}">Settings</a>
+        </nav>
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
