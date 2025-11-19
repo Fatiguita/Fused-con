@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h2>Library</h2>
+        <button onclick="openFolder()" style="width:auto; background:var(--bg); border:1px solid var(--accent); color:var(--accent);">📂 Folder</button>
+    </div>
+    <div id="msg" style="display:none; padding:10px; margin:10px 0; background:#333; color:#fff;"></div>
+    {% if not files %}<p style="color:gray; text-align:center;">No files.</p>{% else %}
+    <ul style="list-style:none; padding:0;">
+        {% for f in files %}
+        <li style="border-bottom:1px solid var(--border); padding:10px 0; display:flex; justify-content:space-between;">
+            <div style="overflow:hidden; text-overflow:ellipsis;">{{ f }}</div>
+            <button onclick="openFile('{{ f }}')" style="width:auto; padding:5px 10px; background:var(--accent); color:white;">▶</button>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+<script>
+function openFolder(){ fetch('/api/open_folder', {method:'POST'}); }
+function openFile(f){ fetch('/api/open_file', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({filename:f})}); }
+</script>
+{% endblock %}
