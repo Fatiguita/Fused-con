@@ -1,6 +1,6 @@
 
-# 📼 Termux Twitch DVR
-
+# 📼 Fused-Con Termux Twitch DVR
+(coded with AI gemini 3.0)
 > **A fully autonomous Twitch Recorder running entirely on your Android phone.**
 
 [![Termux](https://img.shields.io/badge/Platform-Termux-green.svg)](https://termux.dev/en/)
