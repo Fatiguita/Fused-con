@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "--- Termux Twitch DVR Installer ---"
+echo "--- Fused-Con Termux Twitch DVR Installer ---"
 
 # 1. Update System & Install Dependencies
 echo "[*] Updating system packages..."
