@@ -42,7 +42,7 @@ Open Termux and run these commands:
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/Fatiguita/fused-con
+git clone https://github.com/Fatiguita/Fused-con
 cd termux-twitch-dvr
 ```
 
