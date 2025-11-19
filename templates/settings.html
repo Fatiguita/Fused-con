@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <h2>Settings</h2>
+    <form action="/settings" method="POST">
+        <label>Output Path</label><input type="text" name="output_dir" value="{{ config['output_dir'] }}">
+        <label>Check Interval</label><input type="number" name="check_interval" value="{{ config['check_interval'] }}">
+        <label>Filename Format</label><input type="text" name="filename_format" value="{{ config['filename_format'] }}">
+        <label><input type="checkbox" name="manual_mode_global" {% if config['manual_mode_global'] %}checked{% endif %}> Global Manual Mode</label>
+        
+        <label>Theme</label>
+        <select name="theme">
+            <optgroup label="New">
+                <option value="theme-naruto" {% if theme=='theme-naruto' %}selected{% endif %}>🔥 Naruto</option>
+                <option value="theme-cyber" {% if theme=='theme-cyber' %}selected{% endif %}>🤖 Cyberpunk</option>
+                <option value="theme-midnight" {% if theme=='theme-midnight' %}selected{% endif %}>🌑 Midnight</option>
+                <option value="theme-terminal" {% if theme=='theme-terminal' %}selected{% endif %}>💻 Terminal</option>
+                <option value="theme-dracula" {% if theme=='theme-dracula' %}selected{% endif %}>🧛 Dracula</option>
+                <option value="theme-retro" {% if theme=='theme-retro' %}selected{% endif %}>🌴 Retro</option>
+                <option value="theme-paper" {% if theme=='theme-paper' %}selected{% endif %}>📝 Paper</option>
+                <option value="theme-forest" {% if theme=='theme-forest' %}selected{% endif %}>🌲 Forest</option>
+            </optgroup>
+            <optgroup label="Classic">
+                <option value="theme-2010s" {% if theme=='theme-2010s' %}selected{% endif %}>Default</option>
+                <option value="theme-90s" {% if theme=='theme-90s' %}selected{% endif %}>Win 95</option>
+                <option value="theme-otaku" {% if theme=='theme-otaku' %}selected{% endif %}>Otaku</option>
+            </optgroup>
+        </select>
+        <button type="submit">Save</button>
+    </form>
+</div>
+{% endblock %}
