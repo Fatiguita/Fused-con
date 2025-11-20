@@ -20,6 +20,7 @@ sleep 10
 
 # 4. Setup Termux:Boot
 mkdir ~/.termux/boot/
+mkdir ~/.termux/boot/logs/
 BOOT_DIR="$HOME/.termux/boot"
 SCRIPT_PATH="$(pwd)"
 
