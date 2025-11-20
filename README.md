@@ -33,6 +33,7 @@ You need the following apps installed on your Android device:
 3.  **[Termux:Boot](https://f-droid.org/en/packages/com.termux.boot/)** (For auto-start on reboot)
 
 > **⚠️ Important:** Ensure you disable "Battery Optimizations" for Termux and Termux:Boot in your Android Settings, or the system will kill the recording in the background.
+> Also make sure to enter both extension Apps (Termx:API | Termux:Boot) and follow guides
 
 ---
 
@@ -43,7 +44,7 @@ Open Termux and run these commands:
 ### 1. Clone the Repository
 ```bash
 git clone https://github.com/Fatiguita/Fused-con
-cd termux-twitch-dvr
+cd Fused-con
 ```
 
 ### 2. Run the Installer
