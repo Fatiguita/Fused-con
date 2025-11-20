@@ -61,6 +61,11 @@ chmod +x setup.sh
 python app.py
 ```
 
+### 4. Start the App with log file
+```bash
+python app.py --verbose
+```
+
 ---
 
 ## 🖥️ Usage
