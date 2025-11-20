@@ -1,29 +1,71 @@
 {% extends "base.html" %}
 {% block content %}
+
 <div class="card">
     <h3>Add Streamer</h3>
     <form action="/add" method="POST">
+        <!-- Input and Check Button -->
         <div style="display:flex; gap:10px;">
-            <input type="text" id="sName" name="name" placeholder="Channel Name" required>
+            <input type="text" id="sName" name="name" placeholder="Channel Name (e.g. kai_cenat)" required autocomplete="off">
             <button type="button" onclick="check()" style="width:auto; background:var(--bg); border:1px solid var(--accent); color:var(--accent);">🔍</button>
         </div>
-        <div id="hint" style="font-size:0.8em; color:gray; margin-bottom:5px;">Check availability...</div>
-        <div style="display:grid; grid-template-columns:2fr 1fr; gap:10px;">
-            <select name="quality" id="qual"><option value="best">Best</option><option value="audio_only">Audio Only</option></select>
-            <select name="format"><option value="mp4">MP4</option><option value="ts">TS</option></select>
+        
+        <!-- Status Message -->
+        <div id="hint" style="font-size:0.85em; color:gray; margin-bottom:10px; min-height:1.2em;">
+            Enter name and click check, or manually select options below.
         </div>
-        <label style="display:flex; align-items:center; gap:10px;"><input type="checkbox" name="manual" style="width:auto;"> Prompt me</label>
-        <button type="submit">Add</button>
+
+        <!-- Quality and Format Selectors -->
+        <div style="display:grid; grid-template-columns:2fr 1fr; gap:10px;">
+            <select name="quality" id="qual">
+                <option value="best">Best (Default)</option>
+                <option value="1080p60">1080p60</option>
+                <option value="720p60">720p60</option>
+                <option value="720p">720p</option>
+                <option value="480p">480p</option>
+                <option value="360p">360p</option>
+                <option value="160p">160p</option>
+                <option value="audio_only">Audio Only</option>
+            </select>
+            
+            <select name="format">
+                <option value="mp4">MP4</option>
+                <option value="mkv">MKV</option>
+                <option value="ts">TS</option>
+            </select>
+        </div>
+
+        <!-- Manual Mode Checkbox -->
+        <label style="display:flex; align-items:center; gap:10px; margin-top:10px;">
+            <input type="checkbox" name="manual" style="width:auto;"> 
+            Prompt me instead of auto-record
+        </label>
+
+        <button type="submit" style="margin-top:10px;">Add to Watchlist</button>
     </form>
 </div>
 
+<!-- Active Streamers List -->
 {% for n, c in streamers.items() %}
 <div class="card" style="border-left:5px solid {% if 'Recording' in status.get(n,'') %}#f00{% elif 'Waiting' in status.get(n,'') %}#fa0{% else %}var(--border){% endif %};">
-    <div style="display:flex; justify-content:space-between;"><strong>{{ n }}</strong><div><span class="tag">{{ c['quality'] }}</span>{% if c['manual'] %}<span class="tag">MANUAL</span>{% endif %}</div></div>
-    <p style="color:var(--accent); font-size:0.9em;">{{ status.get(n, 'Checking...') }}</p>
+    <div style="display:flex; justify-content:space-between;">
+        <strong>{{ n }}</strong>
+        <div>
+            <span class="tag">{{ c['quality'] }}</span>
+            <span class="tag" style="text-transform:uppercase;">{{ c['format'] }}</span>
+            {% if c['manual'] %}<span class="tag">MANUAL</span>{% endif %}
+        </div>
+    </div>
+    
+    <p style="color:var(--accent); font-size:0.9em; margin:5px 0;">{{ status.get(n, 'Checking...') }}</p>
+    
     <div style="display:flex; gap:5px;">
-        {% if 'Waiting' in status.get(n,'') %}<a href="/record/{{ n }}" style="flex:1; text-align:center; background:#28a745; padding:8px; color:white; border-radius:4px;">START</a>{% endif %}
-        {% if 'Recording' in status.get(n,'') %}<a href="/stop/{{ n }}" style="flex:1; text-align:center; background:#dc3545; padding:8px; color:white; border-radius:4px;">STOP</a>{% endif %}
+        {% if 'Waiting' in status.get(n,'') %}
+            <a href="/record/{{ n }}" style="flex:1; text-align:center; background:#28a745; padding:8px; color:white; border-radius:4px;">START</a>
+        {% endif %}
+        {% if 'Recording' in status.get(n,'') %}
+            <a href="/stop/{{ n }}" style="flex:1; text-align:center; background:#dc3545; padding:8px; color:white; border-radius:4px;">STOP</a>
+        {% endif %}
         <a href="/delete/{{ n }}" style="flex:1; text-align:center; border:1px solid #f55; color:#f55; padding:8px; border-radius:4px;">DEL</a>
     </div>
 </div>
@@ -34,15 +76,49 @@ function check() {
     const n = document.getElementById('sName').value;
     const h = document.getElementById('hint');
     const s = document.getElementById('qual');
-    if(!n) return;
-    h.innerText = "Checking...";
-    fetch('/api/check_qualities', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({name:n})})
-    .then(r=>r.json()).then(d=>{
-        if(d.status==='online'){
-            h.innerText="✅ Online"; h.style.color="#4f4"; s.innerHTML="";
-            d.qualities.forEach(q=>{let o=document.createElement('option'); o.value=q; o.innerText=q; s.appendChild(o)});
-        } else { h.innerText="⚪ Offline (Using Best)"; h.style.color="orange"; }
+    
+    if(!n) {
+        h.innerText = "⚠️ Please enter a name first.";
+        h.style.color = "#f55";
+        return;
+    }
+    
+    h.innerText = "⏳ Checking Twitch availability...";
+    h.style.color = "gray";
+
+    fetch('/api/check_qualities', {
+        method:'POST', 
+        headers:{'Content-Type':'application/json'}, 
+        body:JSON.stringify({name:n})
+    })
+    .then(r=>r.json())
+    .then(d=>{
+        if(d.status === 'online'){
+            h.innerText="✅ Streamer is ONLINE! Updated quality list."; 
+            h.style.color="#4f4"; 
+            
+            // Only clear and replace list if they are ONLINE
+            s.innerHTML="";
+            d.qualities.forEach(q=>{
+                let o=document.createElement('option'); 
+                o.value=q; 
+                o.innerText=q; 
+                s.appendChild(o)
+            });
+        } else if (d.status === 'offline') {
+            h.innerText="⚪ Streamer is OFFLINE. Please select quality manually (Defaults to Best if selection unavailable)."; 
+            h.style.color="orange"; 
+            // We DO NOT clear the list here, so the user can still pick 1080p/720p manually
+        } else {
+            h.innerText="❌ Error: " + (d.message || "Unknown");
+            h.style.color="#f55";
+        }
+    })
+    .catch(e => {
+        h.innerText="❌ Network Error";
+        h.style.color="#f55";
     });
 }
 </script>
+
 {% endblock %}
