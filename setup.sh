@@ -32,7 +32,7 @@ if [ -d "$BOOT_DIR" ]; then
 termux-wake-lock
 cd "$SCRIPT_PATH"
 echo "Starting Twitch DVR..."
-nohup python app.py > logs/boot.log 2>&1 &
+nohup python app.py --verbose &
 EOT
 
     chmod +x "$BOOT_DIR/start_twitch_dvr.sh"
