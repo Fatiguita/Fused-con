@@ -14,11 +14,12 @@ pip install --upgrade pip
 pip install flask requests streamlink
 
 # 3. Setup Storage
-echo "[*] Requesting storage access (Please Allow)..."
+echo "[*] Requesting storage access (Please Allow by typing Y and enter)..."
 termux-setup-storage
-sleep 2
+sleep 10
 
 # 4. Setup Termux:Boot
+mkdir ~/.termux/boot
 BOOT_DIR="$HOME/.termux/boot"
 SCRIPT_PATH="$(pwd)"
 
@@ -34,6 +35,7 @@ nohup python app.py > logs/boot.log 2>&1 &
 EOT
 
     chmod +x "$BOOT_DIR/start_twitch_dvr.sh"
+    ~/.termux/boot/start_twitch_dvr.sh
     echo "[✓] Auto-start configured! App will run on phone restart."
 else
     echo "[!] Termux:Boot folder not found."
