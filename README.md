@@ -43,6 +43,7 @@ Open Termux and run these commands:
 
 ### 1. Clone the Repository
 ```bash
+cd $HOME
 git clone https://github.com/Fatiguita/Fused-con
 cd Fused-con
 ```
