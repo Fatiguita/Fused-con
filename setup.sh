@@ -27,7 +27,7 @@ SCRIPT_PATH="$(pwd)"
 if [ -d "$BOOT_DIR" ]; then
     echo "[*] Setting up auto-start script..."
     
-    cat <<EOT > "$BOOT_DIR/start_twitch_dvr.sh"
+    cat <<EOT > "$BOOT_DIR/fusedcon.sh"
 #!/data/data/com.termux/files/usr/bin/sh
 termux-wake-lock
 cd "$SCRIPT_PATH"
@@ -35,8 +35,8 @@ echo "Starting Twitch DVR..."
 nohup python app.py --verbose &
 EOT
 
-    chmod +x "$BOOT_DIR/start_twitch_dvr.sh"
-    ~/.termux/boot/start_twitch_dvr.sh
+    chmod +x "$BOOT_DIR/fusedcon.sh"
+    ~/.termux/boot/fusedcon.sh
     echo "[✓] Auto-start configured! App will run on phone restart."
 else
     echo "[!] Termux:Boot folder not found."
