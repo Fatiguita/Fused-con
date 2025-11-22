@@ -27,12 +27,26 @@ SCRIPT_PATH="$(pwd)"
 if [ -d "$BOOT_DIR" ]; then
     echo "[*] Setting up auto-start script..."
     
+     # We use a detailed script to ensure environment variables are loaded
     cat <<EOT > "$BOOT_DIR/fusedcon.sh"
 #!/data/data/com.termux/files/usr/bin/sh
+
+# 1. Acquire Lock
 termux-wake-lock
+
+# 2. Set Environment Variables (Crucial for Boot)
+export LD_LIBRARY_PATH=/data/data/com.termux/files/usr/lib
+export PATH=\$PATH:/data/data/com.termux/files/usr/bin
+export HOME=/data/data/com.termux/files/home
+
+# 3. Move to directory
 cd "$SCRIPT_PATH"
-echo "Starting Twitch DVR..."
-nohup python app.py --verbose &
+
+# 4. Run Python (Unbuffered with explicit log)
+# We log stdout and stderr to boot.log to catch startup crashes
+echo "Boot started at \$(date)" >> boot.log
+/data/data/com.termux/files/usr/bin/python -u app.py --verbose >> boot.log 2>&1 &
+
 EOT
 
     chmod +x "$BOOT_DIR/fusedcon.sh"
