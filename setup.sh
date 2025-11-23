@@ -29,7 +29,6 @@ if [ -d "$BOOT_DIR" ]; then
     
      # We use a detailed script to ensure environment variables are loaded
     cat <<EOT > "$BOOT_DIR/fusedcon.sh"
-  GNU nano 8.7   /data/data/com.termux/files/home/.termux/boot/fusedcon.sh
 #!/data/data/com.termux/files/usr/bin/sh
 
 # 1. Acquire Lock
